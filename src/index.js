@@ -2,13 +2,14 @@
 
 // Callbacks
 const handleClick = (ramen) => {
-  // Add code
+  //get ramen details when clicked
   const ramenImg = document.querySelector(".detail-image")
   const ramenName = document.querySelector(".name")
   const ramenRest = document.querySelector(".restaurant")
   const ramenRating = document.querySelector("#rating-display")
   const ramenComment = document.querySelector("#comment-display")
 
+  //display ramen details
   ramenImg.src = ramen.image
   ramenName.textContent = ramen.name
   ramenRest.textContent = ramen.restaurant
@@ -18,67 +19,103 @@ const handleClick = (ramen) => {
 };
 
 const addSubmitListener = () => {
-  // Add code
+  
   const ramenForm = document.getElementById("new-ramen")
+
+  //when new ramen is submitted through form...
   ramenForm.addEventListener('submit',(event) =>{
     event.preventDefault()
 
     //get values in the input box
-    const newName = document.getElementById("new-name")
-    const newRest = document.getElementById("new-restaurant")
-    const newImg = document.getElementById("new-image")
-    const newRating = document.getElementById("new-rating")
-    const newComment = document.getElementById("new-comment")
+    const newName = ramenForm.querySelector("#new-name")
+    const newRest = ramenForm.querySelector("#new-restaurant")
+    const newImg = ramenForm.querySelector("#new-image")
+    const newRating = ramenForm.querySelector("#new-rating")
+    const newComment = ramenForm.querySelector("#new-comment")
 
-    //add those to a new ramen element
-    //append the new ramen element to the images
+    //create new ramen object
+    const newRamen = {
+        name: newName.value,
+        restaurant: newRest.value,
+        image: newImg.value,
+        rating: newRating.value,
+        comment: newComment.value
+    }
+
+    //create new image element 
     const ramenElement = document.createElement('img')
-    console.log(newImg.value)
     ramenElement.src = newImg.value
 
+    //display new ramen image in ramen menu
     const ramenMenu = document.getElementById('ramen-menu')
     ramenMenu.appendChild(ramenElement)
 
-    // does the new ramen element need to get added to the json database? maybe that's advanced
+    //when new image is clicked dispaly its properties 
+    ramenElement.addEventListener('click',() =>{
+      handleClick(newRamen)
+    })
   })
-  //add a new ramen and add it to the ramen menu div
 
 }
 
 const displayRamens = () => {
-  // Add code
-
   const ramenMenu = document.getElementById('ramen-menu')
 
+  //get json data
   fetch("http://localhost:3000/ramens")
   .then((response) => response.json())
   .then((ramens) => {
-    //create element
+    //display ramen upon opening
+    handleClick(ramens[0])
+
     ramens.forEach(ramen =>{
+    //create img element for each ramen
     const ramenElement = document.createElement('img')
     ramenElement.src = ramen.image
 
-    //append child
+    //append to menu
     ramenMenu.appendChild(ramenElement)
     
-    //click
-
+    //when clicked...
     ramenElement.addEventListener('click',() =>{
       handleClick(ramen)
     })
-
     })
   })
 };
 
+const addEditListener = () =>{
+
+  const editForm = document.getElementById("edit-ramen")
+
+  //when new ramen is submitted through form...
+  editForm.addEventListener('submit',(event) =>{
+    event.preventDefault()
+
+    //get values in the input box
+    const editRating = editForm.querySelector("#new-rating")
+    const editComment = editForm.querySelector("#new-comment")
+
+    //update the current display
+    const ramenRating = document.querySelector("#rating-display")
+    const ramenComment = document.querySelector("#comment-display")
+
+    ramenRating.textContent = editRating.value
+    ramenComment.textContent = editComment.value
+
+  })
+
+
+
+}
+
 const main = () => {
   // Invoke displayRamens here
   // Invoke addSubmitListener here
-
-  //domcontentloaded listener
   document.addEventListener("DOMContentLoaded",() =>{
     displayRamens()
     addSubmitListener()
+    addEditListener()
   })
 }
 
