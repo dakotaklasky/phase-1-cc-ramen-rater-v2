@@ -43,17 +43,30 @@ const addSubmitListener = () => {
     }
 
     //create new image element 
+    const divElement = document.createElement('div')
     const ramenElement = document.createElement('img')
     ramenElement.src = newImg.value
 
     //display new ramen image in ramen menu
     const ramenMenu = document.getElementById('ramen-menu')
-    ramenMenu.appendChild(ramenElement)
+    ramenMenu.appendChild(divElement)
+    divElement.appendChild(ramenElement)
+
+    const deleteButton = document.createElement('button')
+    deleteButton.textContent = "x"
+
+    divElement.appendChild(deleteButton)
+
+    deleteButton.addEventListener('click', () =>{
+      divElement.remove()
+    })
 
     //when new image is clicked dispaly its properties 
     ramenElement.addEventListener('click',() =>{
       handleClick(newRamen)
     })
+
+    ramenForm.reset()
   })
 
 }
@@ -69,17 +82,30 @@ const displayRamens = () => {
     handleClick(ramens[0])
 
     ramens.forEach(ramen =>{
+    //create div element in ramen-menu
+    const divElement = document.createElement('div')
     //create img element for each ramen
     const ramenElement = document.createElement('img')
     ramenElement.src = ramen.image
 
     //append to menu
-    ramenMenu.appendChild(ramenElement)
+    ramenMenu.appendChild(divElement)
+    divElement.appendChild(ramenElement)
     
     //when clicked...
     ramenElement.addEventListener('click',() =>{
       handleClick(ramen)
     })
+
+    const deleteButton = document.createElement('button')
+    deleteButton.textContent = "x"
+
+    divElement.appendChild(deleteButton)
+
+    deleteButton.addEventListener('click',() =>{
+      divElement.remove()
+    })
+
     })
   })
 };
@@ -102,6 +128,8 @@ const addEditListener = () =>{
 
     ramenRating.textContent = editRating.value
     ramenComment.textContent = editComment.value
+
+    editForm.reset()
 
   })
 
